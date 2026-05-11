@@ -68,5 +68,9 @@ server {
 	EOF
 	systemctl restart nginx
 	'
-
+	scp ca.cer user@192.168.2.2:~/
+	sshpass -p "P@ssw0rd" ssh -o StrictHostKeyChecking=no user@192.168.2.3 \
+	"
+	cp /home/user/ca.cer /etc/pki/ca-trust/source/anchors/ && update-ca-trust
+	"
 fi
