@@ -24,11 +24,13 @@ then
 	scp docker.au-team.irpo.cer root@172.16.1.1:~/
 
 	sshpass -p "P@ssw0rd" ssh -o StrictHostKeyChecking=no root@172.16.1.1 \
-	'
+	"
 	mkdir /etc/nginx/ssl
 	cp *au-team.irpo* /etc/nginx/ssl
-	cat << EOF > /etc/nginx/sites-available/default
-	server {
+	rm -f /etc/nginx/default
+	"
+	cat << EOF > default \
+server {
     listen 443 ssl;
     server_name web.au-team.irpo;
     ssl_certificate /etc/nginx/ssl/web.au-team.irpo.cer;
@@ -65,12 +67,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
-	EOF
-	systemctl restart nginx
-	'
+EOF
+	scp defautl root@172.16.1.1:/etc/nginx/
 	scp ca.cer user@192.168.2.2:~/
-	sshpass -p "P@ssw0rd" ssh -o StrictHostKeyChecking=no user@192.168.2.3 \
-	"
-	cp /home/user/ca.cer /etc/pki/ca-trust/source/anchors/ && update-ca-trust
-	"
 fi
